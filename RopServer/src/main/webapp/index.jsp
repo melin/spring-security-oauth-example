@@ -1,3 +1,4 @@
+<%@page import="com.github.melin.rop.UserServiceClientUtil"%>
 <%@page import="org.springframework.util.LinkedMultiValueMap"%>
 <%@page import="org.springframework.util.MultiValueMap"%>
 <%@page import="org.springframework.web.client.RestTemplate"%>
@@ -33,9 +34,16 @@
 	
 		        String result = restTemplate.postForObject(url, form, String.class);
 		        out.print(result);
+		        
+		        String repo = UserServiceClientUtil.invokerApi(result);
+		        out.print("</br></br>调用服务接口结果：http://localhost:8090/RopServer/api, method = user.getSession </br><textarea rows='5' cols='100'>" + repo + "</textarea>");
+		       	
 		        session.setAttribute("result", result);
 			} else {
 				out.print(session.getAttribute("result"));
+				
+				String repo = UserServiceClientUtil.invokerApi((String)session.getAttribute("result"));
+				out.print("</br></br>调用服务接口结果：http://localhost:8090/RopServer/api, method = user.getSession </br><textarea rows='5' cols='100'>" + repo + "</textarea>");
 			}
 		} else {
 	%>

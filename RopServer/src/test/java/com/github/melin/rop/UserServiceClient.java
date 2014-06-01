@@ -4,7 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -34,8 +39,11 @@ public class UserServiceClient {
         ropClient.setSessionId(((LogonResponse) response.getSuccessResponse()).getSessionId());
     }
     
-    @Test
-    public void createSession1() {
+    public static String invokerApi(String result) throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+        HashMap map = objectMapper.readValue(result, HashMap.class);
+        String accessCode = (String)map.get("access_token");
+        
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
         form.add("method", "user.getSession");
@@ -43,13 +51,12 @@ public class UserServiceClient {
         form.add("v", "1.0");
         form.add("userName", "tomson");
         form.add("locale", "en");
-        form.add("access_token", "3ab2c4c3-51dd-4810-aeb0-df4e71211877");
+        form.add("access_token", accessCode);
         
         //对请求参数列表进行签名
         String sign = RopUtils.sign(form.toSingleValueMap(), "abcdeabcdeabcdeabcdeabcde");
         form.add("sign", sign);
 
-        String response = restTemplate.postForObject(SERVER_URL, form, String.class);
-        System.out.println("response:\n" + response);
+        return restTemplate.postForObject(SERVER_URL, form, String.class);
     }
 }
