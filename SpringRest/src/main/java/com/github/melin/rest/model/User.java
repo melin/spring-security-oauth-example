@@ -1,5 +1,8 @@
 package com.github.melin.rest.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "user")
 public class User {
 	private long id;
 	private String username;

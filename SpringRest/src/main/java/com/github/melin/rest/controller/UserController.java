@@ -1,7 +1,6 @@
 package com.github.melin.rest.controller;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +13,7 @@ public class UserController {
 	public User getUser(long id, Authentication authentication) {
 		System.out.println("==" + authentication);
 		
-		System.out.println("==" + SecurityContextHolder.getContext().getAuthentication());
+		//System.out.println("==" + SecurityContextHolder.getContext().getAuthentication());
 		User user = new User();
 		user.setId(id);
 		user.setUsername("zhangsan");

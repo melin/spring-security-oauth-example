@@ -12,11 +12,18 @@
 	<context:component-scan base-package="com.github.melin.rest.controller"/>
 	
 	<bean id="urlPathHelper" class="com.github.melin.rest.support.spring.UrlPathHelperExt" />
-	<mvc:annotation-driven>
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
 		<mvc:path-matching path-helper="urlPathHelper"/>
 	</mvc:annotation-driven>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/api"/>
+			<bean class="com.github.melin.rest.support.spring.ServiceErrorHandlerInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
-	<mvc:default-servlet-handler/>
+	<!-- <mvc:default-servlet-handler/> -->
 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="order" value="2" />
@@ -28,13 +35,13 @@
 		</property>
 	</bean>
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-	    <property name="favorPathExtension" value="true" />
-	    <property name="favorParameter" value="false" />
+	    <property name="favorPathExtension" value="false" />
+	    <property name="favorParameter" value="true" />
 	    <property name="ignoreAcceptHeader" value="true"/>
-	    <property name="defaultContentType" value="text/html" />
+	    <property name="defaultContentType" value="application/xml" />
 	    <property name="mediaTypes">
 			<props>
-				<prop key="xml">application/xml</prop>
+				<prop key="xml">application/xml;charset=GBK</prop>
 				<prop key="json">application/json</prop>
 			</props>
 	    </property>
