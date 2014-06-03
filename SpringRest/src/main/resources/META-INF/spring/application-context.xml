@@ -6,13 +6,15 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-
+	<bean class="com.github.melin.rest.support.InitializingService" />
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:/META-INF/res/config-${profiles.active}.properties" />
@@ -40,5 +42,19 @@
  	</bean>
  	
  	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+ 	
+ 	<bean id="openServiceFilter" class="com.github.melin.rest.support.OpenServiceFilter">
+ 		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
+ 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
+	</bean>
+	
+	<bean id="mappingJackson2HttpMessageConverter" 
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+	<bean id="jaxb2RootElementHttpMessageConverter" 
+		class="com.github.melin.rest.support.spring.Jaxb2RootElementHttpMessageConverterExt"></bean>
+	<util:list id="messageConverters">
+		<ref bean="mappingJackson2HttpMessageConverter"/>
+		<ref bean="jaxb2RootElementHttpMessageConverter"/>
+	</util:list>
 	
 </beans>

@@ -24,6 +24,7 @@ public class UserServiceClientUtil {
         form.add("method", "user.get");
         form.add("version", "1.0");
         form.add("id", "1");
+        form.add("locale", "zh_CN");
         form.add("access_token", accessCode);
         
         String rep = restTemplate.postForObject(SERVER_URL, form, String.class);

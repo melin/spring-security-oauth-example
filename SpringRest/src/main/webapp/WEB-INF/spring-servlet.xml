@@ -11,10 +11,49 @@
 	
 	<context:component-scan base-package="com.github.melin.rest.controller"/>
 	
-	<bean id="urlPathHelper" class="com.github.melin.rest.support.spring.UrlPathHelperExt" />
-	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
-		<mvc:path-matching path-helper="urlPathHelper"/>
-	</mvc:annotation-driven>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="order" value="0" />
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="urlPathHelper">
+			<bean class="com.github.melin.rest.support.spring.UrlPathHelperExt" />
+		</property>
+	</bean>
+	
+	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="conversionService">
+			<bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+		</property>
+		<property name="validator">
+			<bean class="org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean"></bean>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="messageConverters" ref="messageConverters" />
+	</bean>
+	
+	<bean class="com.github.melin.rest.support.spring.NoServiceMethodExceptionResolver">
+		<property name="order" value="0" />
+		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
+ 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="messageConverters" ref="messageConverters" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
+		<property name="order" value="2" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver">
+		<property name="order" value="3" />
+	</bean>
+	<!-- end -->
 	
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -24,16 +63,6 @@
 	</mvc:interceptors>
 
 	<!-- <mvc:default-servlet-handler/> -->
-
-	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<property name="order" value="2" />
-		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
-		<property name="defaultViews">
-			<list>
-				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
-			</list>
-		</property>
-	</bean>
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 	    <property name="favorPathExtension" value="false" />
 	    <property name="favorParameter" value="true" />
@@ -46,11 +75,6 @@
 			</props>
 	    </property>
 	</bean>
-
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+	
 </beans>
 

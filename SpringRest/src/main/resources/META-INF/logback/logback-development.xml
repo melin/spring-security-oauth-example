@@ -16,4 +16,5 @@
     </root>
 
 	<logger name="org.springframework.aop.framework.Cglib2AopProxy" level="ERROR" />
+	<logger name="org.springframework.web.servlet.PageNotFound" level="ERROR" />
 </included>

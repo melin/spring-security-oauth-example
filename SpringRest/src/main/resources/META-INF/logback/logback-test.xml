@@ -19,4 +19,6 @@
         <level value="INFO" />
         <appender-ref ref="FILE" />
     </root>
+    
+    <logger name="org.springframework.web.servlet.PageNotFound" level="ERROR" />
 </included>
