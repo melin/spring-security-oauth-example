@@ -24,12 +24,10 @@ public enum MainErrorType {
     FORBIDDEN_REQUEST,
     METHOD_OBSOLETED,
     BUSINESS_LOGIC_ERROR,
-    MISSING_SESSION,
-    INVALID_SESSION,
+    MISSING_ACCESS_TOKEN,
+    INVALID_ACCESS_TOKEN,
     MISSING_APP_KEY,
     INVALID_APP_KEY,
-    MISSING_SIGNATURE,
-    INVALID_SIGNATURE,
     MISSING_METHOD,
     INVALID_METHOD,
     MISSING_VERSION,
@@ -55,12 +53,10 @@ public enum MainErrorType {
         errorCodeMap.put(MainErrorType.FORBIDDEN_REQUEST, "7");
         errorCodeMap.put(MainErrorType.METHOD_OBSOLETED, "8");
         errorCodeMap.put(MainErrorType.BUSINESS_LOGIC_ERROR, "9");
-        errorCodeMap.put(MainErrorType.MISSING_SESSION, "20");
-        errorCodeMap.put(MainErrorType.INVALID_SESSION, "21");
+        errorCodeMap.put(MainErrorType.MISSING_ACCESS_TOKEN, "20");
+        errorCodeMap.put(MainErrorType.INVALID_ACCESS_TOKEN, "21");
         errorCodeMap.put(MainErrorType.MISSING_APP_KEY, "22");
         errorCodeMap.put(MainErrorType.INVALID_APP_KEY, "23");
-        errorCodeMap.put(MainErrorType.MISSING_SIGNATURE, "24");
-        errorCodeMap.put(MainErrorType.INVALID_SIGNATURE, "25");
         errorCodeMap.put(MainErrorType.MISSING_METHOD, "26");
         errorCodeMap.put(MainErrorType.INVALID_METHOD, "27");
         errorCodeMap.put(MainErrorType.MISSING_VERSION, "28");

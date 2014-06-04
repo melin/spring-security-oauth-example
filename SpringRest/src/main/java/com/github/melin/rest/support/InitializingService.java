@@ -18,6 +18,7 @@ public class InitializingService implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
         ResourceBundleMessageSource bundleMessageSource = new ResourceBundleMessageSource();
         bundleMessageSource.setBasenames(I18N_ROP_ERROR);
+        LOGGER.info("加载资源文件：" + I18N_ROP_ERROR);
         
         MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(bundleMessageSource);
         MainErrors.setErrorMessageSourceAccessor(messageSourceAccessor);

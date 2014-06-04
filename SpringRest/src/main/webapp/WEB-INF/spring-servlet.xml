@@ -11,13 +11,14 @@
 	
 	<context:component-scan base-package="com.github.melin.rest.controller"/>
 	
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+	<bean id="requestMappingHandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 		<property name="order" value="0" />
 		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
 		<property name="urlPathHelper">
 			<bean class="com.github.melin.rest.support.spring.UrlPathHelperExt" />
 		</property>
 	</bean>
+	<bean class="com.github.melin.rest.support.spring.RequestMappingHandlerMappingResolver" />
 	
 	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
 		<property name="conversionService">
@@ -34,24 +35,18 @@
 		<property name="messageConverters" ref="messageConverters" />
 	</bean>
 	
-	<bean class="com.github.melin.rest.support.spring.NoServiceMethodExceptionResolver">
-		<property name="order" value="0" />
-		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
- 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
-	</bean>
-	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
-		<property name="order" value="1" />
+		<property name="order" value="0" />
 		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
 		<property name="messageConverters" ref="messageConverters" />
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
-		<property name="order" value="2" />
+		<property name="order" value="1" />
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver">
-		<property name="order" value="3" />
+		<property name="order" value="2" />
 	</bean>
 	<!-- end -->
 	

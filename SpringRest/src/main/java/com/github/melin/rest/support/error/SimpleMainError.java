@@ -66,5 +66,10 @@ public class SimpleMainError implements MainError {
         this.subErrors.add(subError);
         return this;
     }
+
+	@Override
+	public String toString() {
+		return "MainError [code=" + code + ", message=" + message + "]";
+	}
 }
 

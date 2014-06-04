@@ -15,6 +15,7 @@ public class Jaxb2RootElementHttpMessageConverterExt extends
 	protected void customizeMarshaller(Marshaller marshaller) {
 		try {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, "GBK");
 		} catch (PropertyException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
