@@ -1,5 +1,7 @@
 package com.github.melin.rest.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,11 @@ public class UserController {
 		user.setAge(21);
 		user.setAddress("地球");
 		return user;
+	}
+	
+	@RequestMapping(value="user.save", params={"version=1.0"})
+	public void saveUser(@Valid User user) {
+		System.out.println("user 保存成功 = " + user);
 	}
 	
 }

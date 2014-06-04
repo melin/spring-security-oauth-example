@@ -42,19 +42,5 @@
  	</bean>
  	
  	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
- 	
- 	<bean id="openServiceFilter" class="com.github.melin.rest.support.CheckOpenServiceFilter">
- 		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
- 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
-	</bean>
-	
-	<bean id="mappingJackson2HttpMessageConverter" 
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
-	<bean id="jaxb2RootElementHttpMessageConverter" 
-		class="com.github.melin.rest.support.spring.Jaxb2RootElementHttpMessageConverterExt"></bean>
-	<util:list id="messageConverters">
-		<ref bean="mappingJackson2HttpMessageConverter"/>
-		<ref bean="jaxb2RootElementHttpMessageConverter"/>
-	</util:list>
 	
 </beans>

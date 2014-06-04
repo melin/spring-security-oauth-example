@@ -79,6 +79,24 @@ public class UserServiceTest {
         LOGGER.info(rep);
 	}
 	
+	@Test
+	public void testSaveUser() {
+		RestTemplate restTemplate = new RestTemplate();
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
+        form.add("method", "user.save");
+        form.add("version", "1.0");
+        form.add("locale", "zh_CN");
+        form.add("format", "json");
+        form.add("token", "xxxxx");
+        //form.add("username", "melin");
+        form.add("age", "23");
+        form.add("address", "hefei");
+        
+        restTemplate.setErrorHandler(new ResponseErrorHandlerTest());
+        String rep = restTemplate.postForObject(SERVER_URL, form, String.class);
+        LOGGER.info(rep);
+	}
+	
 	private final class ResponseErrorHandlerTest implements
 		ResponseErrorHandler {
 		@Override
