@@ -34,17 +34,12 @@
 		<property name="messageConverters" ref="messageConverters" />
 	</bean>
 	
-	<bean class="org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver">
+	<bean class="com.github.melin.rest.support.spring.DefaultHandlerExceptionResolver">
 		<property name="order" value="0" />
+		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
+ 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
 	</bean>
 	<!-- end -->
-	
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/api"/>
-			<bean class="com.github.melin.rest.support.spring.ServiceErrorHandlerInterceptor"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
 
 	<!-- <mvc:default-servlet-handler/> -->
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -54,7 +49,7 @@
 	    <property name="defaultContentType" value="application/xml" />
 	    <property name="mediaTypes">
 			<props>
-				<prop key="xml">application/xml;charset=GBK</prop>
+				<prop key="xml">application/xml;charset=UTF-8</prop>
 				<prop key="json">application/json</prop>
 			</props>
 	    </property>

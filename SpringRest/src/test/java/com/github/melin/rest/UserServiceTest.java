@@ -86,7 +86,7 @@ public class UserServiceTest {
         form.add("method", "user.save");
         form.add("version", "1.0");
         form.add("locale", "zh_CN");
-        form.add("format", "json");
+        form.add("format", "xml");
         form.add("token", "xxxxx");
         //form.add("username", "melin");
         form.add("age", "23");

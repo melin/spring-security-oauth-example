@@ -94,6 +94,9 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
 			format = "xml";
 		}
 		
+		request.setAttribute("locale", locale);
+		request.setAttribute("format", format);
+		
 		MainError mainError = null;
 		String method = request.getParameter("method");
 		method = "/" + method.trim();
@@ -128,7 +131,7 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
         
         if(mainError != null) {
         	httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			convertData(response, httpServletResponse, format, mainError);
+			convertData(httpServletResponse, format, mainError);
         } else {
         	chain.doFilter(request, response);
         }
@@ -143,12 +146,19 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
 		return locale;
 	}
 	
-	private void convertData(ServletResponse response,
-			HttpServletResponse httpServletResponse, String format,
+	/**
+	 * 转换异常信息为format格式
+	 * 
+	 * @param httpServletResponse
+	 * @param format
+	 * @param mainError
+	 * @throws IOException
+	 */
+	private void convertData(HttpServletResponse httpServletResponse, String format,
 			MainError mainError) throws IOException {
 		if("json".equals(format)) {
 			jsonMessageConverter.write(mainError, MediaType.valueOf("application/json;charset=UTF-8"),
-				new ServletServerHttpResponse((HttpServletResponse)response));
+				new ServletServerHttpResponse(httpServletResponse));
 		} else if("xml".equals(format)) {
 			xmlMessageConverter.write(mainError, MediaType.valueOf("application/xml"), 
 				new ServletServerHttpResponse(httpServletResponse));
