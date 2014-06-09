@@ -19,20 +19,20 @@
 	</listener>
 	
 	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-name>openServiceFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-name>openServiceFilter</filter-name>
 		<url-pattern>/api</url-pattern>
 	</filter-mapping>
 	
 	<filter>
-		<filter-name>openServiceFilter</filter-name>
+		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>openServiceFilter</filter-name>
+		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/api</url-pattern>
 	</filter-mapping>
 	

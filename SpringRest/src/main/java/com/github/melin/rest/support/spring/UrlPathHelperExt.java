@@ -4,6 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.util.UrlPathHelper;
 
+/**
+ * 
+ * @author libinsong1204@gmail.com
+ *
+ */
 public class UrlPathHelperExt extends UrlPathHelper {
 
 	@Override

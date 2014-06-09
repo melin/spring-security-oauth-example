@@ -10,21 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.Ordered;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 
+import com.github.melin.rest.support.ErrorRequestMessageConverter;
 import com.github.melin.rest.support.error.MainError;
 import com.github.melin.rest.support.error.SubError;
 import com.github.melin.rest.support.error.SubErrorType;
 import com.github.melin.rest.support.error.SubErrors;
 
+/**
+ * 
+ * @author libinsong1204@gmail.com
+ *
+ */
 public class DefaultHandlerExceptionResolver extends AbstractHandlerExceptionResolver {
 	
 	private static final Map<String, SubErrorType> INVALIDE_CONSTRAINT_SUBERROR_MAPPINGS = new LinkedHashMap<String, SubErrorType>();
@@ -46,8 +48,7 @@ public class DefaultHandlerExceptionResolver extends AbstractHandlerExceptionRes
         INVALIDE_CONSTRAINT_SUBERROR_MAPPINGS.put("AssertFalse", SubErrorType.ISV_INVALID_PARAMETE);
     }
     
-    private MappingJackson2HttpMessageConverter jsonMessageConverter;
-	private Jaxb2RootElementHttpMessageConverter xmlMessageConverter;
+    private ErrorRequestMessageConverter messageConverter;
 	
 	public DefaultHandlerExceptionResolver() {
 		setOrder(Ordered.LOWEST_PRECEDENCE);
@@ -77,29 +78,8 @@ public class DefaultHandlerExceptionResolver extends AbstractHandlerExceptionRes
         //将Bean数据绑定时产生的错误转换为Rop的错误
         if (errorList != null && errorList.size() > 0) {
         	MainError mainError = toMainErrorOfSpringValidateErrors(errorList, (Locale)request.getAttribute("locale"));
-        	
-        	String format = (String) request.getAttribute("format");
-        	convertData(response, format, mainError);
+        	messageConverter.convertData(request, response, mainError);
         }
-	}
-	
-	/**
-	 * 转换异常信息为format格式
-	 * 
-	 * @param httpServletResponse
-	 * @param format
-	 * @param mainError
-	 * @throws IOException
-	 */
-	private void convertData(HttpServletResponse httpServletResponse, String format,
-			MainError mainError) throws IOException {
-		if("json".equals(format)) {
-			jsonMessageConverter.write(mainError, MediaType.valueOf("application/json;charset=UTF-8"),
-				new ServletServerHttpResponse(httpServletResponse));
-		} else if("xml".equals(format)) {
-			xmlMessageConverter.write(mainError, MediaType.valueOf("application/xml"), 
-				new ServletServerHttpResponse(httpServletResponse));
-		}
 	}
 	
 	/**
@@ -168,21 +148,12 @@ public class DefaultHandlerExceptionResolver extends AbstractHandlerExceptionRes
         return mainError;
     }
 
-	public MappingJackson2HttpMessageConverter getJsonMessageConverter() {
-		return jsonMessageConverter;
+	public ErrorRequestMessageConverter getMessageConverter() {
+		return messageConverter;
 	}
 
-	public void setJsonMessageConverter(
-			MappingJackson2HttpMessageConverter jsonMessageConverter) {
-		this.jsonMessageConverter = jsonMessageConverter;
+	public void setMessageConverter(ErrorRequestMessageConverter messageConverter) {
+		this.messageConverter = messageConverter;
 	}
-
-	public Jaxb2RootElementHttpMessageConverter getXmlMessageConverter() {
-		return xmlMessageConverter;
-	}
-
-	public void setXmlMessageConverter(
-			Jaxb2RootElementHttpMessageConverter xmlMessageConverter) {
-		this.xmlMessageConverter = xmlMessageConverter;
-	}
+    
 }

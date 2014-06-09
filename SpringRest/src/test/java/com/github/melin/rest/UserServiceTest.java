@@ -26,8 +26,9 @@ public class UserServiceTest {
         form.add("id", "1");
         form.add("locale", "zh_CN");
         form.add("format", "xml");
-        form.add("token", "xxxxx");
+        form.add("access_token", "xxxxx");
         
+        restTemplate.setErrorHandler(new ResponseErrorHandlerTest());
         String rep = restTemplate.postForObject(SERVER_URL, form, String.class);
         LOGGER.info(rep);
 	}
@@ -41,7 +42,7 @@ public class UserServiceTest {
         form.add("id", "1");
         form.add("locale", "zh_CN");
         form.add("format", "json");
-        form.add("token", "xxxxx");
+        form.add("access_token", "xxxxx");
         
         restTemplate.setErrorHandler(new ResponseErrorHandlerTest());
         String rep = restTemplate.postForObject(SERVER_URL, form, String.class);
@@ -87,7 +88,7 @@ public class UserServiceTest {
         form.add("version", "1.0");
         form.add("locale", "zh_CN");
         form.add("format", "xml");
-        form.add("token", "xxxxx");
+        form.add("access_token", "xxxxx");
         //form.add("username", "melin");
         form.add("age", "23");
         form.add("address", "hefei");

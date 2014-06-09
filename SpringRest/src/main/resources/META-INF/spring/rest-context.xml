@@ -36,8 +36,7 @@
 	
 	<bean class="com.github.melin.rest.support.spring.DefaultHandlerExceptionResolver">
 		<property name="order" value="0" />
-		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
- 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
+		<property name="messageConverter" ref="errorRequestMessageConverter" />
 	</bean>
 	<!-- end -->
 
@@ -56,18 +55,22 @@
 	</bean>
 	
 	<bean id="openServiceFilter" class="com.github.melin.rest.support.CheckOpenServiceFilter">
- 		<property name="jsonMessageConverter" ref="mappingJackson2HttpMessageConverter" />
- 		<property name="xmlMessageConverter" ref="jaxb2RootElementHttpMessageConverter" />
+ 		<property name="messageConverter" ref="errorRequestMessageConverter" />
  		<property name="handlerMapping" ref="requestMappingHandlerMapping" />
 	</bean>
 	
-	<bean id="mappingJackson2HttpMessageConverter" 
+	<bean id="errorRequestMessageConverter" class="com.github.melin.rest.support.ErrorRequestMessageConverter">
+		<property name="jsonMessageConverter" ref="jsonMessageConverter" />
+		<property name="xmlMessageConverter" ref="xmlMessageConverter" />
+	</bean>
+	
+	<bean id="jsonMessageConverter" 
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
-	<bean id="jaxb2RootElementHttpMessageConverter" 
+	<bean id="xmlMessageConverter" 
 		class="com.github.melin.rest.support.spring.Jaxb2RootElementHttpMessageConverterExt"></bean>
 	<util:list id="messageConverters">
-		<ref bean="mappingJackson2HttpMessageConverter"/>
-		<ref bean="jaxb2RootElementHttpMessageConverter"/>
+		<ref bean="jsonMessageConverter"/>
+		<ref bean="xmlMessageConverter"/>
 	</util:list>
 </beans>
 

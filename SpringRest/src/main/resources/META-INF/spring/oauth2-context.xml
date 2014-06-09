@@ -24,7 +24,9 @@
 	</security:http>
 	
 	<bean id="oauthAccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
-	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint" />
+	<bean id="oauthAuthenticationEntryPoint" class="com.github.melin.rest.support.spring.OAuth2AuthenticationEntryPointExt" >
+		<property name="messageConverter" ref="errorRequestMessageConverter" />
+	</bean>
 	
 	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased"
 		xmlns="http://www.springframework.org/schema/beans">
@@ -54,6 +56,7 @@
 		
 	<bean id="resourceServerFilter" class="org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationEntryPoint" ref="oauthAuthenticationEntryPoint" />
 	</bean>
 	
 </beans>

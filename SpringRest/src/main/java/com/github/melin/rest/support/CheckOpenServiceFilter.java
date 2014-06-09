@@ -13,15 +13,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.AbstractHandlerMethodMapping;
@@ -47,8 +44,7 @@ import com.google.common.collect.Multimap;
 public class CheckOpenServiceFilter implements Filter, InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CheckOpenServiceFilter.class);
 	
-	private MappingJackson2HttpMessageConverter jsonMessageConverter;
-	private Jaxb2RootElementHttpMessageConverter xmlMessageConverter;
+	private ErrorRequestMessageConverter messageConverter;
 	private RequestMappingHandlerMapping handlerMapping;
 	
 	private Multimap<String, String> methodVersionMap = ArrayListMultimap.create(); 
@@ -87,6 +83,7 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		
 		Locale locale = getLocale(request);
 		String format = request.getParameter("format");
@@ -123,15 +120,15 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
         }
         
         if(mainError == null) {
-        	String accessToken = request.getParameter("token");
+        	String accessToken = request.getParameter("access_token");
         	if(!StringUtils.hasText(accessToken)) {
         		mainError = MainErrors.getError(MainErrorType.MISSING_ACCESS_TOKEN, locale);
         	}
         }
         
         if(mainError != null) {
-        	httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			convertData(httpServletResponse, format, mainError);
+        	httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	messageConverter.convertData(httpServletRequest, httpServletResponse, mainError);
         } else {
         	chain.doFilter(request, response);
         }
@@ -145,47 +142,10 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
 		Locale locale = StringUtils.parseLocaleString(localePart);
 		return locale;
 	}
-	
-	/**
-	 * 转换异常信息为format格式
-	 * 
-	 * @param httpServletResponse
-	 * @param format
-	 * @param mainError
-	 * @throws IOException
-	 */
-	private void convertData(HttpServletResponse httpServletResponse, String format,
-			MainError mainError) throws IOException {
-		if("json".equals(format)) {
-			jsonMessageConverter.write(mainError, MediaType.valueOf("application/json;charset=UTF-8"),
-				new ServletServerHttpResponse(httpServletResponse));
-		} else if("xml".equals(format)) {
-			xmlMessageConverter.write(mainError, MediaType.valueOf("application/xml"), 
-				new ServletServerHttpResponse(httpServletResponse));
-		}
-	}
 
 	@Override
 	public void destroy() {
 		
-	}
-
-	public MappingJackson2HttpMessageConverter getJsonMessageConverter() {
-		return jsonMessageConverter;
-	}
-
-	public void setJsonMessageConverter(
-			MappingJackson2HttpMessageConverter jsonMessageConverter) {
-		this.jsonMessageConverter = jsonMessageConverter;
-	}
-
-	public Jaxb2RootElementHttpMessageConverter getXmlMessageConverter() {
-		return xmlMessageConverter;
-	}
-
-	public void setXmlMessageConverter(
-			Jaxb2RootElementHttpMessageConverter xmlMessageConverter) {
-		this.xmlMessageConverter = xmlMessageConverter;
 	}
 
 	public RequestMappingHandlerMapping getHandlerMapping() {
@@ -194,6 +154,14 @@ public class CheckOpenServiceFilter implements Filter, InitializingBean {
 
 	public void setHandlerMapping(RequestMappingHandlerMapping handlerMapping) {
 		this.handlerMapping = handlerMapping;
+	}
+
+	public ErrorRequestMessageConverter getMessageConverter() {
+		return messageConverter;
+	}
+
+	public void setMessageConverter(ErrorRequestMessageConverter messageConverter) {
+		this.messageConverter = messageConverter;
 	}
 
 }

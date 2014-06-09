@@ -19,6 +19,11 @@
 	<bean id="errorProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="properties" value="classpath:/META-INF/res/error.properties" />
 	</bean>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:/META-INF/res/config-${profiles.active}.properties" />
+	</bean>
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
 		<property name="url" value="${jdbc.url}" />

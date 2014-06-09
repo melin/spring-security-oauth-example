@@ -7,6 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 
+/**
+ * 
+ * @author libinsong1204@gmail.com
+ *
+ */
 public class Jaxb2RootElementHttpMessageConverterExt extends
 		Jaxb2RootElementHttpMessageConverter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Jaxb2RootElementHttpMessageConverterExt.class);

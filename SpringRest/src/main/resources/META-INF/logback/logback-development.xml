@@ -11,7 +11,7 @@
     </appender>
     
     <root>
-        <level value="info" />
+        <level value="INFO" />
         <appender-ref ref="CONSOLE" />
     </root>
 
