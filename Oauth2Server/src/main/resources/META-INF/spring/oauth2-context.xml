@@ -85,14 +85,14 @@
 					<constructor-arg index="0" ref="tokenServices" />
 					<constructor-arg index="1" ref="clientDetails" />
 					<constructor-arg index="2" ref="OAuth2RequestFactory" />
-				</bean>
+				</bean> -->
 				
 				<bean class="org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter">
-					<constructor-arg index="0" ref="authenticationManager" />
+					<constructor-arg index="0" ref="clientAuthenticationManager" />
 					<constructor-arg index="1" ref="tokenServices" />
 					<constructor-arg index="2" ref="clientDetails" />
 					<constructor-arg index="3" ref="OAuth2RequestFactory" />
-				</bean> -->
+				</bean>
 			</list>
 		</constructor-arg>
 	</bean>

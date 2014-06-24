@@ -45,7 +45,7 @@
 		xmlns="http://www.springframework.org/schema/beans">
 		<constructor-arg>
 			<list>
-				<bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+				<!-- <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" /> -->
 				<bean class="org.springframework.security.access.vote.RoleVoter" />
 				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
 			</list>
